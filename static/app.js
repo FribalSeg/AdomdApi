@@ -54,6 +54,7 @@ const refs = {
   statusOutput: document.getElementById("statusOutput"),
   tableOutput: document.getElementById("tableOutput"),
   pivotArea: document.getElementById("pivotArea"),
+  checkAlwaysExecute: document.getElementById("alwaysExecute"),
 };
 
 function setStatus(message, isError = false) {
@@ -434,6 +435,11 @@ async function generateDaxQueryFromBuilder() {
   } catch (error) {
     setStatus(`DAX builder failed: ${error.message}`, true);
   }
+
+//   check if the checkbox is checked
+if (refs.checkAlwaysExecute.checked) {
+    runQuery();
+}
 }
 
 async function loadHierarchy() {
