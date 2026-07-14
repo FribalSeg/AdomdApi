@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OLAP Pivot Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pivottable@2.23.0/dist/pivot.min.css"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">OLAP WORKBENCH</p>
+        <h1>Pivot Studio</h1>
+      </div>
+      <div class="actions-right">
+        <button id="copyApiCodeBtn" class="secondary">Copy API Code</button>
+        <button id="copyConfigBtn" class="secondary">Copy Pivot Config</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel-meta reveal">
+        <h2>Tables, Columns, and Measures</h2>
+        <div class="button-row compact">
+          <button id="loadHierarchyBtn" class="ghost">Load Hierarchy</button>
+          <button id="loadDmvsBtn" class="ghost">Raw DMVs</button>
+          <button id="loadDiscoverBtn" class="ghost">Raw Discover</button>
+        </div>
+        <input id="fieldSearch" type="text" placeholder="Search table, column, or measure" autocomplete="off" />
+        <div id="hierarchyTree" class="output-box hierarchy-box"></div>
+        <pre id="metadataOutput" class="output-box metadata-box"></pre>
+      </section>
+
+      <section class="panel panel-query reveal">
+        <h2>Visual Builder</h2>
+        <div class="grid-2">
+          <label>
+            Language
+            <select id="languageSelect">
+              <option value="dax">DAX</option>
+              <option value="mdx">MDX</option>
+              <option value="xmla">XMLA</option>
+            </select>
+          </label>
+          <label>
+            Save Name
+            <input id="saveName" type="text" placeholder="Sales by Month" />
+          </label>
+        </div>
+
+        <div class="builder-grid">
+          <div>
+            <h3>Rows</h3>
+            <div id="rowsBucket" class="bucket" data-bucket="rows"></div>
+          </div>
+          <div>
+            <h3>Columns</h3>
+            <div id="colsBucket" class="bucket" data-bucket="cols"></div>
+          </div>
+          <div>
+            <h3>Values (Measures)</h3>
+            <div id="valsBucket" class="bucket" data-bucket="vals"></div>
+          </div>
+          <div>
+            <h3>Filters</h3>
+            <div id="filtersBucket" class="bucket" data-bucket="filters"></div>
+            <p class="hint">Operators: contains, does not contains, starts with, does not starts with, in, not in, is, is not, is blank, is not blank.</p>
+          </div>
+        </div>
+
+        <textarea
+          id="queryInput"
+          spellcheck="false"
+          placeholder="Generated code appears here. You can still edit manually."
+        ></textarea>
+
+        <div class="button-row">
+          <button id="generateCodeBtn" class="secondary">Generate Code</button>
+          <button id="runQueryBtn" class="primary">Run Query</button>
+          <button id="saveQueryBtn" class="secondary">Save New</button>
+          <button id="updateQueryBtn" class="secondary">Update</button>
+          <button id="clearEditorBtn" class="ghost">Clear</button>
+        </div>
+      </section>
+
+      <section class="panel panel-saved reveal">
+        <h2>Saved Definitions</h2>
+        <div class="button-row compact">
+          <button id="refreshSavedBtn" class="ghost">Refresh</button>
+          <button id="deleteSavedBtn" class="ghost danger">Delete</button>
+        </div>
+        <select id="savedList" size="10"></select>
+        <p class="hint">Shared list for all authenticated users.</p>
+      </section>
+
+      <section class="panel panel-pivot reveal">
+        <h2>Pivot Table</h2>
+        <pre id="statusOutput" class="status">Ready.</pre>
+        <div id="tableOutput" class="output-box"></div>
+        <p class="hint">Drag fields between rows, columns, values, and filters.</p>
+        <div id="pivotArea"></div>
+      </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pivottable@2.23.0/dist/pivot.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pivottable@2.23.0/dist/pivot.en.min.js"></script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
