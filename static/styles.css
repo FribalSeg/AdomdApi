@@ -345,7 +345,7 @@ button.danger {
 }
 
 .bucket-chip {
-  border-radius: 999px;
+  /* border-radius: 999px; */
   background: rgba(29, 125, 122, 0.12);
   color: #114846;
   border: 1px solid rgba(29, 125, 122, 0.28);
