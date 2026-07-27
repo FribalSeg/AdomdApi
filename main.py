@@ -360,6 +360,18 @@ def PyadomdToJSON(cursor):
 
     return results
 
+def process_olap_reports(parameters: list[dict]):
+    results = []
+    for param in parameters:
+        r = {
+            'id': param.get('id', ''),
+            'data': run_olap_query(param.get('query_text', ''))
+        }
+
+        results.append(r)
+
+    return results
+
 
 def process_olap_report(parameters: dict):
     return run_olap_query(parameters.get('query_text', ''))
@@ -435,6 +447,12 @@ def get_current_username(
 class OLAPReportRequest(BaseModel):
     query_text: str
 
+class OLAPReportRequests(BaseModel):
+    id: str
+    query_text: str
+
+class OLAPReportRequestList(BaseModel):
+    reports: list[OLAPReportRequests]
 
 class QueryExecutionRequest(BaseModel):
     language: str = Field(min_length=1)
@@ -945,3 +963,24 @@ async def generate_olap_report(
         return result
     except Exception as e:
         return {'status': 'Failed to generate OLAP report', 'error': str(e)}
+
+
+@app.post('/generate_olap_reports', tags=['OLAP Report'])
+async def generate_olap_reports(
+    parameters: OLAPReportRequestList,
+    username: Annotated[str, Depends(get_current_username)]
+):
+    """
+    Endpoint to generate an OLAP report based on the provided parameters.
+    """
+    try:
+        # Se for enviado apenas 1 item, transformamos em uma lista de 1 elemento
+        items = parameters.reports
+
+        # Converte para dicionário usando .model_dump() (Pydantic v2)
+        data = [item.model_dump() for item in items]
+
+        result = process_olap_reports(data)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to generate OLAP report: {str(e)}')
